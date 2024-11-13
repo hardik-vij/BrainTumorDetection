@@ -1,0 +1,5 @@
+tensorflow-cpu==2.11.0         # Use a more compatible version of TensorFlow
+streamlit                      # Ensure Streamlit is installed
+Pillow                         # For image processing
+numpy                          # For numerical operations
+opencv-python-headless         # For OpenCV without GUI dependencies
