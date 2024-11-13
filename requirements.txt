@@ -2,8 +2,3 @@ tensorflow
 streamlit
 Pillow
 numpy
-opencv
-os
-cv2
-sklearn
-keras
