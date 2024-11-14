@@ -23,7 +23,7 @@ if uploaded_file is not None:
     
     # Resize the image to match the model's input shape, if known (e.g., (32, 32))
     # Replace (32, 32) with the input size the model was trained on
-    img_resized = cv2.resize(image, (None,64, 64,3))  # Resize to the model's expected input size
+    img_resized = cv2.resize(image, (64,64))  # Resize to the model's expected input size
     img_normalized = img_resized / 255.0  # Normalize pixel values
     img_reshaped = np.expand_dims(img_normalized, axis=0)  # Add batch dimension
     
