@@ -33,9 +33,9 @@ if uploaded_file is not None:
         # Run the model prediction
         prediction = model.predict(img_reshaped)
         if prediction[0][0] > 0.5:
-            st.write("Prediction: Negative for Brain Tumor")
-        else:
             st.write("Prediction: Positive for Brain Tumor")
+        else:
+            st.write("Prediction: Negative for Brain Tumor")
     except ValueError as e:
         st.error(f"Prediction error: {e}")
 
