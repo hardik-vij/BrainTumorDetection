@@ -1,37 +1,43 @@
 import streamlit as st
-import tensorflow as tf
 from tensorflow.keras.models import load_model
+from tensorflow.keras.preprocessing.image import img_to_array
+from PIL import Image, ImageOps
 import numpy as np
-import cv2
-from PIL import Image
 
-# Load the model
+# Load your model
 model = load_model("BrainTumordet10.h5")
 
-# Streamlit UI
+# Set up Streamlit app
 st.title("Brain Tumor Detection")
-st.write("Upload an MRI scan to detect if there's a tumor.")
+st.write("Upload an MRI image to detect if there is a brain tumor.")
 
 # File uploader
-uploaded_file = st.file_uploader("Choose an MRI image...", type=["jpg", "png", "jpeg"])
+uploaded_file = st.file_uploader("Choose an MRI image...", type=["jpg", "jpeg", "png"])
 
 if uploaded_file is not None:
-    # Load the image
+    # Load and preprocess the image
     image = Image.open(uploaded_file)
-    st.image(image, caption='Uploaded MRI scan', use_column_width=True)
+    st.image(image, caption="Uploaded MRI Image", use_column_width=True)
+    
+    # Ensure consistent image resizing and check input shape
+    img_resized = ImageOps.fit(image, (224, 224), Image.ANTIALIAS)  # Resize to match model input
+    img_array = img_to_array(img_resized)
+    
+    # Convert the image to a numpy array and normalize pixel values
+    img_normalized = img_array / 255.0
+    img_reshaped = np.expand_dims(img_normalized, axis=0)  # Add batch dimension
 
-    # Preprocess the image
-    img_array = np.array(image)
-    img_resized = cv2.resize(img_array, (224, 224))  # Adjust size as per model input
-    img_resized = img_resized / 255.0  # Normalize if necessary
-    img_reshaped = np.expand_dims(img_resized, axis=0)
+    st.write("Classifying...")
 
-    # Make a prediction
-    prediction = model.predict(img_reshaped)
+    try:
+        # Run the model prediction
+        prediction = model.predict(img_reshaped)
+        if prediction[0][0] > 0.5:
+            st.write("Prediction: Positive for Brain Tumor")
+        else:
+            st.write("Prediction: Negative for Brain Tumor")
+    except ValueError as e:
+        st.error(f"Prediction error: {e}")
 
-    # Display results
-    st.write("Prediction:")
-    if prediction[0] > 0.5:
-        st.write("Tumor detected")
-    else:
-        st.write("No tumor detected")
+else:
+    st.write("Please upload an image to classify.")
