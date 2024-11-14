@@ -6,7 +6,7 @@ import numpy as np
 from PIL import Image
 
 # Load the model
-model = load_model("C:\\Users\\abc\\Desktop\\FOML\\venv\\archive (2)\\BrainTumordet10.h5")
+model = load_model("BrainTumordet10.h5")
 
 st.title("Brain Tumor Detection")
 st.write("Upload an MRI scan to detect if there's a tumor.")
